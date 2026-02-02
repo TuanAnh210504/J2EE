@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+
+<head>
+    <title>Danh sách sách</title>
+</head>
+
+<body>
+    <section>
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white d-flex justify-content-between">
+                <h4 class="mb-0">Danh sách sách</h4>
+                <a href="/add" class="btn btn-light btn-sm">Thêm sách</a>
+            </div>
+
+            <div class="card-body">
+                <table class="table table-bordered table-hover text-center">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên sách</th>
+                            <th>Tác giả</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="book : ${books}">
+                            <td th:text="${book.id}"></td>
+                            <td th:text="${book.title}"></td>
+                            <td th:text="${book.author}"></td>
+                            <td>
+                                <a th:href="@{/edit/{id}(id=${book.id})}" class="btn btn-warning btn-sm">✏️ Sửa</a>
+                                <a th:href="@{/delete/{id}(id=${book.id})}" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Bạn có chắc muốn xóa không?')">🗑️ Xóa</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

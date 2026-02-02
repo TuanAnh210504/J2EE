@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/_layout}">
+
+<head>
+    <title th:text="${product.id == 0 ? 'Thêm sản phẩm' : 'Cập nhật sản phẩm'}"></title>
+
+    <style>
+        .img-preview {
+            margin-top: 10px;
+        }
+
+        .img-preview img {
+            max-width: 200px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 4px;
+        }
+    </style>
+</head>
+
+<body>
+<section layout:fragment="content">
+
+    <h2 th:text="${product.id == 0 ? '➕ Thêm sản phẩm' : '✏️ Cập nhật sản phẩm'}"></h2>
+
+    <form th:action="${product.id == 0}
+                     ? @{/products/create}
+                     : @{/products/edit/{id}(id=${product.id})}"
+          th:object="${product}"
+          method="post">
+
+        <input type="hidden" th:field="*{id}"/>
+
+        <!-- Tên -->
+        <div>
+            <label>Tên sản phẩm</label><br>
+            <input type="text" th:field="*{name}">
+            <div class="error"
+                 th:if="${#fields.hasErrors('name')}"
+                 th:errors="*{name}"></div>
+        </div>
+
+        <br>
+
+        <!-- Ảnh -->
+        <div>
+            <label>Đường dẫn ảnh (URL)</label><br>
+            <input type="text"
+                   th:field="*{image}"
+                   id="imageInput"
+                   placeholder="https://example.com/image.jpg"
+                   oninput="previewImage()">
+
+            <div class="error"
+                 th:if="${#fields.hasErrors('image')}"
+                 th:errors="*{image}"></div>
+
+            <div class="img-preview">
+                <img id="imagePreview"
+                     th:if="*{image != null}"
+                     th:src="*{image}"
+                     alt="Preview">
+            </div>
+        </div>
+
+        <br>
+
+        <!-- Giá -->
+        <div>
+            <label>Giá</label><br>
+            <input type="number" th:field="*{price}" min="1">
+            <div class="error"
+                 th:if="${#fields.hasErrors('price')}"
+                 th:errors="*{price}"></div>
+        </div>
+
+        <br>
+
+        <!-- Danh mục -->
+        <div>
+            <label>Danh mục</label><br>
+            <select th:field="*{categoryId}">
+                <option value="">-- Chọn danh mục --</option>
+                <option th:each="c : ${categories}"
+                        th:value="${c.id}"
+                        th:text="${c.name}">
+                </option>
+            </select>
+            <div class="error"
+                 th:if="${#fields.hasErrors('categoryId')}"
+                 th:errors="*{categoryId}"></div>
+        </div>
+
+        <br>
+
+        <button type="submit">💾 Lưu</button>
+        <a th:href="@{/products}">⬅ Quay lại</a>
+
+    </form>
+
+    <script>
+        function previewImage() {
+            const input = document.getElementById("imageInput");
+            const preview = document.getElementById("imagePreview");
+
+            if (!preview) {
+                const img = document.createElement("img");
+                img.id = "imagePreview";
+                img.style.maxWidth = "200px";
+                document.querySelector(".img-preview").appendChild(img);
+            }
+
+            document.getElementById("imagePreview").src = input.value;
+        }
+    </script>
+
+</section>
+</body>
+</html>
