@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/_layout}">
+
+<head>
+    <title>Đăng ký tài khoản</title>
+</head>
+
+<section layout:fragment="content">
+    <div style="max-width: 480px; margin: 40px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: var(--shadow-md);">
+        <h2 style="font-size: 1.8rem; margin-bottom: 24px; text-align: center;">Tạo tài khoản sinh viên</h2>
+        
+        <div th:if="${error}" style="background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem;">
+            <span th:text="${error}">Lỗi đăng ký</span>
+        </div>
+
+        <form th:action="@{/register}" th:object="${registerDto}" method="post">
+            <div class="form-group">
+                <label for="username">Tên đăng nhập</label>
+                <input type="text" id="username" th:field="*{username}" placeholder="Nhập tên đăng nhập...">
+                <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" th:field="*{password}" placeholder="•••••••••">
+                <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" th:field="*{email}" placeholder="sv@example.com">
+                <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px; font-size: 1rem; margin-top: 8px;">Đăng ký</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 24px; font-size: 0.9rem; color: var(--text-muted);">
+            Đã có tài khoản? <a th:href="@{/login}" style="color: var(--primary); font-weight: 500;">Đăng nhập ngay</a>
+        </p>
+    </div>
+</section>
+</html>

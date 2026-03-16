@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/_layout}">
+
+<head>
+    <title>Quản lý Học Phần</title>
+</head>
+
+<section layout:fragment="content">
+    <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items:flex-end;">
+        <div>
+            <h2 style="font-size: 1.5rem; color: var(--text); margin-bottom: 8px;">⚙️ Quản lý Học Phần (Admin)</h2>
+        </div>
+        <a th:href="@{/admin/courses/create}" class="btn btn-primary">➕ Thêm học phần mới</a>
+    </div>
+
+    <div th:if="${errorMessage}" style="background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 0.95rem;" th:text="${errorMessage}">
+        Lỗi
+    </div>
+    <div th:if="${successMessage}" style="background: #d1fae5; color: #047857; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 0.95rem;" th:text="${successMessage}">
+        Thành công
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ảnh</th>
+                <th>Tên học phần</th>
+                <th>Số tín chỉ</th>
+                <th>Giảng viên</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="course : ${courses}" th:style="${course.deleted} ? 'opacity: 0.6; background-color: #f8fafc;' : ''">
+                <td th:text="${course.id}">1</td>
+                <td>
+                    <img style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;"
+                        th:src="${course.image != null and course.image != ''} ? ${course.image} : '/images/default-course.png'" >
+                </td>
+                <td th:text="${course.name}" style="font-weight: 600;">Môn học</td>
+                <td th:text="${course.credits}">3</td>
+                <td th:text="${course.lecturer}">GV</td>
+                <td>
+                    <div style="display: flex; gap: 8px;" th:if="${!course.deleted}">
+                        <a th:href="@{/admin/courses/edit/{id}(id=${course.id})}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Sửa</a>
+                        <a th:href="@{/admin/courses/delete/{id}(id=${course.id})}" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="return confirm('Bạn có chắc chắn muốn xoá học phần này không?')">Xoá</a>
+                    </div>
+                    <div style="display: flex; gap: 8px;" th:if="${course.deleted}">
+                        <span class="btn" style="background:#e2e8f0; color: #64748b; padding: 6px 12px; font-size: 0.8rem; cursor: not-allowed; border: none;">Đã xóa</span>
+                        <a th:href="@{/admin/courses/restore/{id}(id=${course.id})}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem; background-color: #059669; border-color: #059669;">Khôi phục</a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+</html>

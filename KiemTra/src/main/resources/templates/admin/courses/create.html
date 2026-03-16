@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/_layout}">
+
+<head>
+    <title>Thêm Học Phần</title>
+</head>
+
+<section layout:fragment="content">
+    <div style="margin-bottom: 24px;">
+        <h2 style="font-size: 1.5rem; color: var(--text);">➕ Thêm Học Phần Mới</h2>
+    </div>
+
+    <div class="content-box" style="max-width: 600px;">
+        <form th:action="@{/admin/courses/create}" th:object="${course}" method="post" enctype="multipart/form-data">
+            
+            <div class="form-group">
+                <label for="name">Tên học phần</label>
+                <input type="text" id="name" th:field="*{name}">
+                <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="imageFile">Ảnh minh họa</label>
+                <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label for="credits">Số tín chỉ</label>
+                <input type="number" id="credits" th:field="*{credits}" min="1">
+                <div class="error" th:if="${#fields.hasErrors('credits')}" th:errors="*{credits}"></div>
+            </div>
+
+
+
+            <div style="margin-top: 24px; display: flex; gap: 12px;">
+                <button type="submit" class="btn btn-primary">💾 Lưu học phần</button>
+                <a th:href="@{/admin/courses}" class="btn btn-danger" style="background:#f1f5f9; color: var(--text);">Thoát</a>
+            </div>
+        </form>
+    </div>
+</section>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/_layout}">
+
+<head>
+    <title>Đăng nhập</title>
+</head>
+
+<section layout:fragment="content">
+    <div style="max-width: 480px; margin: 40px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: var(--shadow-md);">
+        <h2 style="font-size: 1.8rem; margin-bottom: 24px; text-align: center;">Đăng nhập</h2>
+        
+        <div th:if="${param.error}" style="background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem;">
+            Sai tên đăng nhập hoặc mật khẩu!
+        </div>
+        
+        <div th:if="${param.success}" style="background: #d1fae5; color: #047857; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem;">
+            Đăng ký thành công! Vui lòng đăng nhập.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="username">Tên đăng nhập</label>
+                <input type="text" id="username" name="username" required placeholder="Nhập tên đăng nhập...">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" name="password" required placeholder="•••••••••">
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px; font-size: 1rem; margin-top: 8px;">Đăng nhập</button>
+        </form>
+
+        <div style="text-align: center; margin: 24px 0; position: relative;">
+            <hr style="border: none; border-top: 1px solid var(--border);">
+            <span style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: white; padding: 0 10px; font-size: 0.85rem; color: var(--text-muted);">Hoặc</span>
+        </div>
+
+        <a th:href="@{/oauth2/authorization/google}" class="btn" style="width: 100%; justify-content: center; background: white; border: 1px solid var(--border); color: var(--text); padding: 10px;">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="G" style="width: 20px; height: 20px;">
+            Đăng nhập với Google
+        </a>
+
+        <p style="text-align: center; margin-top: 24px; font-size: 0.9rem; color: var(--text-muted);">
+            Chưa có tài khoản? <a th:href="@{/register}" style="color: var(--primary); font-weight: 500;">Đăng ký ngay</a>
+        </p>
+    </div>
+</section>
+</html>

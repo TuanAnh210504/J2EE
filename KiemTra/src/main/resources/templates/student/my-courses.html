@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/_layout}">
+
+<head>
+    <title>Học phần của tôi</title>
+</head>
+
+<section layout:fragment="content">
+    <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items:flex-end;">
+        <div>
+            <h2 style="font-size: 1.5rem; color: var(--text); margin-bottom: 8px;">🎒 Học phần của tôi</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">
+                Danh sách các học phần bạn đã đăng ký
+            </p>
+        </div>
+        <a th:href="@{/home}" class="btn btn-primary">➕ Đăng ký thêm</a>
+    </div>
+
+    <!-- COURSE LIST -->
+    <div th:if="${#lists.isEmpty(enrollments)}" style="text-align:center; padding: 48px; background: white; border-radius: 8px; border: 1px dashed var(--border);">
+        <h3 style="color:var(--text-muted); font-weight: 500;">Bạn chưa đăng ký học phần nào.</h3>
+    </div>
+
+    <table th:unless="${#lists.isEmpty(enrollments)}">
+        <thead>
+            <tr>
+                <th>Ảnh minh họa</th>
+                <th>Tên học phần</th>
+                <th>Số tín chỉ</th>
+                <th>Giảng viên</th>
+                <th>Ngày đăng ký</th>
+                <th style="text-align: right;">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="enrollment : ${enrollments}">
+                <td>
+                    <img style="width: 64px; height: 64px; object-fit: cover; border-radius: 4px; border: 1px solid #e2e8f0;"
+                        th:src="${enrollment.course.image != null and enrollment.course.image != ''} ? ${enrollment.course.image} : '/images/default-course.png'" alt="Img">
+                </td>
+                <td th:text="${enrollment.course.name}" style="font-weight: 600;">Toán cao cấp</td>
+                <td th:text="${enrollment.course.credits}">3</td>
+                <td th:text="${enrollment.course.lecturer}">Thầy A</td>
+                <td th:text="${enrollment.enrollDate}">2026-03-16</td>
+                <td style="text-align: right;">
+                    <form th:id="'unenrollForm-' + ${enrollment.course.id}" th:action="@{/unenroll/{id}(id=${enrollment.course.id})}" method="post" style="margin: 0;">
+                        <button type="button" th:onclick="'confirmUnenroll(' + ${enrollment.course.id} + ')'" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.85rem;">
+                            Xóa
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</section>
+</html>

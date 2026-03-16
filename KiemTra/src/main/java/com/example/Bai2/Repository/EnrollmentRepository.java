@@ -1,0 +1,20 @@
+package com.example.Bai2.Repository;
+
+import com.example.Bai2.Model.Enrollment;
+import com.example.Bai2.Model.Student;
+import com.example.Bai2.Model.Course;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Repository
+public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
+    List<Enrollment> findByStudent(Student student);
+    boolean existsByStudentAndCourse(Student student, Course course);
+    boolean existsByCourse(Course course);
+    
+    @Transactional
+    void deleteByStudentAndCourse(Student student, Course course);
+}

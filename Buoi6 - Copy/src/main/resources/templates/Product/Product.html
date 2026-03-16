@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{layout/_layout}">
+
+<head>
+    <title>Danh sách sản phẩm</title>
+</head>
+
+<section layout:fragment="content">
+
+    <h2>📦 Danh sách sản phẩm</h2>
+
+    <div style="margin-bottom: 20px;" sec:authorize="hasRole('ADMIN')">
+        <a class="btn btn-primary" th:href="@{/products/create}">➕ Thêm sản phẩm mới</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Tên sản phẩm</th>
+                <th>Ảnh</th>
+                <th>Giá</th>
+                <th>Danh mục</th>
+                <th sec:authorize="hasRole('ADMIN')">Chức năng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${products}">
+                <td>
+                    <span style="font-weight: 600;" th:text="${p.name}"></span>
+                </td>
+                <td>
+                    <img class="product-img" th:if="${p.image != null}" th:src="${p.image}" alt="Product Image" />
+                    <div class="img-placeholder" th:if="${p.image == null}">🖼</div>
+                </td>
+                <td>
+                    <span class="price-badge"
+                        th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 0, 'POINT') + ' ₫'}">
+                    </span>
+                </td>
+                <td>
+                    <span class="cat-badge" th:if="${p.category != null}" th:text="${p.category.name}"></span>
+                    <span style="color: #9ca3af; font-size:.85rem;" th:if="${p.category == null}">—</span>
+                </td>
+                <td sec:authorize="hasRole('ADMIN')">
+                    <div class="action-links">
+                        <a class="btn btn-secondary" th:href="@{/products/edit/{id}(id=${p.id})}">✏️ Sửa</a>
+                        <a class="btn btn-danger" th:href="@{/products/delete/{id}(id=${p.id})}"
+                            onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">🗑 Xóa</a>
+                    </div>
+                </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(products)}">
+                <td colspan="5" style="text-align:center; padding: 40px; color: #9ca3af;">
+                    Chưa có sản phẩm nào. Hãy thêm sản phẩm đầu tiên!
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</section>
+
+</html>

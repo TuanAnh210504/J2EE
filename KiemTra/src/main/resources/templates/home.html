@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{layout/_layout}">
+
+<head>
+    <title>Danh sách Học phần</title>
+</head>
+
+<section layout:fragment="content">
+
+    <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items:flex-end;">
+        <div>
+            <h2 style="font-size: 1.5rem; color: var(--text); margin-bottom: 8px;">📚 Danh sách Học phần</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;" th:if="${keyword != null and keyword != ''}">
+                Kết quả tìm kiếm cho: '<strong th:text="${keyword}"></strong>'
+            </p>
+            <p style="color: var(--text-muted); font-size: 0.95rem;" th:unless="${keyword != null and keyword != ''}">
+                Khám phá các học phần và đăng ký ngay
+            </p>
+        </div>
+    </div>
+
+    <!-- COURSE GRID -->
+    <div class="course-grid">
+        <div class="course-card" th:each="course : ${coursePage.content}">
+            <img class="course-img" th:src="${course.image != null and course.image != ''} ? ${course.image} : '/images/default-course.png'" alt="Course Image">
+            <div class="course-body">
+                <h3 class="course-title" th:text="${course.name}">Tên môn học</h3>
+                <div class="course-meta">
+                    <span>👨‍🏫 Giảng viên: </span><strong th:text="${course.lecturer}">Nguyễn Văn A</strong>
+                </div>
+
+            </div>
+            
+            <div class="course-footer">
+                <span class="credit-badge" th:text="${course.credits} + ' tín chỉ'">3 tín chỉ</span>
+                
+                <th:block sec:authorize="hasRole('STUDENT')">
+                    <form th:if="${!enrolledCourseIds.contains(course.id)}" th:id="'enrollForm-' + ${course.id}" th:action="@{/enroll/{id}(id=${course.id})}" method="post" style="margin: 0;">
+                        <button type="button" th:onclick="'confirmEnroll(' + ${course.id} + ')'" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.85rem;">
+                            ✍️ Đăng ký
+                        </button>
+                    </form>
+                    <button th:if="${enrolledCourseIds.contains(course.id)}" class="btn" disabled style="background:#e2e8f0; color: #94a3b8; padding: 6px 12px; font-size: 0.85rem; cursor: not-allowed; border: none;">
+                        ✔️ Đã đăng ký
+                    </button>
+                </th:block>
+                
+                <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn" style="background:#f1f5f9; color: var(--text); padding: 6px 12px; font-size: 0.85rem;">
+                    🔒 Đăng nhập để ĐK
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(coursePage.content)}" style="text-align:center; padding: 48px; background: white; border-radius: 8px; border: 1px dashed var(--border);">
+        <h3 style="color:var(--text-muted); font-weight: 500;">Không tìm thấy học phần nào.</h3>
+    </div>
+
+    <!-- PAGINATION -->
+    <ul class="pagination" th:if="${coursePage.totalPages > 1}">
+        <li class="page-item" th:classappend="${coursePage.first} ? 'disabled'">
+            <a th:if="${!coursePage.first}" th:href="@{/home(page=${coursePage.number - 1}, keyword=${keyword})}">« Trước</a>
+            <span th:if="${coursePage.first}">« Trước</span>
+        </li>
+        
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, coursePage.totalPages - 1)}"
+            th:classappend="${i == coursePage.number} ? 'active'">
+            <a th:if="${i != coursePage.number}" th:href="@{/home(page=${i}, keyword=${keyword})}" th:text="${i + 1}">1</a>
+            <span th:if="${i == coursePage.number}" th:text="${i + 1}">1</span>
+        </li>
+
+        <li class="page-item" th:classappend="${coursePage.last} ? 'disabled'">
+            <a th:if="${!coursePage.last}" th:href="@{/home(page=${coursePage.number + 1}, keyword=${keyword})}">Sau »</a>
+            <span th:if="${coursePage.last}">Sau »</span>
+        </li>
+    </ul>
+
+</section>
+</html>

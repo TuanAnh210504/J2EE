@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/_layout}">
+
+<head>
+    <title>Sửa Học Phần</title>
+</head>
+
+<section layout:fragment="content">
+    <div style="margin-bottom: 24px;">
+        <h2 style="font-size: 1.5rem; color: var(--text);">✏️ Sửa Học Phần</h2>
+    </div>
+
+    <div class="content-box" style="max-width: 600px;">
+        <form th:action="@{/admin/courses/edit/{id}(id=${course.id})}" th:object="${course}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}">
+            
+            <div class="form-group">
+                <label for="name">Tên học phần</label>
+                <input type="text" id="name" th:field="*{name}">
+                <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="imageFile">Ảnh minh họa mới (để trống nếu không đổi)</label>
+                <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*">
+                <div th:if="${course.image != null}">
+                    <img th:src="${course.image}" alt="Current" style="max-height: 100px; margin-top: 10px; border-radius: 4px;">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="credits">Số tín chỉ</label>
+                <input type="number" id="credits" th:field="*{credits}" min="1">
+                <div class="error" th:if="${#fields.hasErrors('credits')}" th:errors="*{credits}"></div>
+            </div>
+
+
+
+            <div class="form-group">
+                <label for="lecturer">Giảng viên</label>
+                <input type="text" id="lecturer" th:field="*{lecturer}" class="form-control" placeholder="Nhập tên giảng viên">
+                <div class="error" th:if="${#fields.hasErrors('lecturer')}" th:errors="*{lecturer}"></div>
+            </div>
+
+            <div style="margin-top: 24px; display: flex; gap: 12px;">
+                <button type="submit" class="btn btn-primary">💾 Cập nhật học phần</button>
+                <a th:href="@{/admin/courses}" class="btn btn-danger" style="background:#f1f5f9; color: var(--text);">Thoát</a>
+            </div>
+        </form>
+    </div>
+</section>
+</html>

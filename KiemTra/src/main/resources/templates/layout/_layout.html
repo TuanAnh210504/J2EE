@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:title-pattern="$CONTENT_TITLE | Hệ Thống Đăng Ký Học Phần">Hệ Thống Đăng Ký Học Phần | Khoa CNTT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --primary-light: #818cf8;
+            --accent: #f43f5e;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --danger: #ef4444;
+            --success: #10b981;
+            --shadow-sm: 0 1px 2px 0 rgba(0,0,0, .05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0, .1), 0 2px 4px -1px rgba(0,0,0, .06);
+            --radius: 8px;
+        }
+        body {
+            font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
+            min-height: 100vh; display: flex; flex-direction: column;
+        }
+        /* ===== HEADER ===== */
+        header {
+            background: #ffffff;
+            padding: 0 32px;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,.1);
+            position: sticky; top: 0; z-index: 100;
+        }
+        nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+        .nav-brand { font-size: 1.25rem; font-weight: 700; color: var(--primary); text-decoration: none; }
+        .nav-links { display: flex; align-items: center; gap: 16px; }
+        .nav-links a { color: var(--text); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color .2s; }
+        .nav-links a:hover { color: var(--primary); }
+        .btn-auth {
+            background: var(--primary); color: #fff !important; border-radius: var(--radius); padding: 8px 16px;
+        }
+        .btn-auth:hover { background: var(--primary-dark); }
+        .search-form { display: flex; align-items: center; gap: 8px; }
+        .search-input {
+            padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius);
+            font-family: 'Inter', sans-serif; font-size: 0.9rem; outline: none;
+        }
+        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79,70,229,.2); }
+        
+        main { flex: 1; padding: 32px 24px; max-width: 1280px; margin: 0 auto; width: 100%; }
+        .content-box { background: var(--surface); padding: 32px; border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+        footer { background: #1e293b; color: #94a3b8; text-align: center; padding: 24px; font-size: 0.85rem; }
+        
+        /* Shared Table & Buttons */
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; font-weight: 500; cursor: pointer; text-decoration: none; border: none; transition: all .2s; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-danger { background: #fee2e2; color: var(--danger); }
+        .btn-danger:hover { background: #fecaca; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        table thead tr { background: #f1f5f9; color: var(--text); }
+        table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+        table th { font-weight: 600; }
+        /* Forms */
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-weight: 500; font-size: 0.9rem; margin-bottom: 6px; }
+        .form-group input, .form-group select { width: 100%; max-width: 480px; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.95rem; }
+        .error { color: var(--danger); font-size: 0.85rem; margin-top: 4px; }
+        /* Cards */
+        .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+        .course-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: transform .2s, box-shadow .2s; }
+        .course-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+        .course-img { width: 100%; height: 160px; object-fit: cover; background: #e2e8f0; }
+        .course-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+        .course-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+        .course-meta { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+        .course-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .credit-badge { background: #e0e7ff; color: var(--primary-dark); padding: 4px 8px; border-radius: 99px; font-size: 0.75rem; font-weight: 600; }
+        /* Pagination */
+        .pagination { display: flex; list-style: none; gap: 8px; justify-content: center; margin-top: 32px; }
+        .page-item a, .page-item span { padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; color: var(--text); text-decoration: none; font-size: 0.9rem; }
+        .page-item.active span { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .page-item a:hover { background: #f1f5f9; }
+        /* Live Search Dropdown */
+        .search-container { position: relative; display: flex; align-items: center; gap: 8px; }
+        .search-dropdown {
+            position: absolute; top: calc(100% + 4px); left: 0; right: 48px;
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            box-shadow: var(--shadow-md); z-index: 1000; display: none; max-height: 300px; overflow-y: auto;
+        }
+        .search-result-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; text-decoration: none; color: var(--text); border-bottom: 1px solid var(--border); transition: background .2s; }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background: #f1f5f9; }
+        .search-result-img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; background: #e2e8f0; }
+        .search-result-info { display: flex; flex-direction: column; }
+        .search-result-title { font-weight: 600; font-size: 0.9rem; }
+        .search-result-meta { font-size: 0.75rem; color: var(--text-muted); }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a class="nav-brand" th:href="@{/home}">🎓 StudyHub</a>
+            
+            <form class="search-form" th:action="@{/home}" method="get">
+                <div class="search-container">
+                    <input type="text" id="liveSearchInput" name="keyword" th:value="${keyword}" class="search-input" placeholder="Tìm kiếm học phần..." autocomplete="off">
+                    <div id="searchDropdown" class="search-dropdown"></div>
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 12px; border-radius: var(--radius);">🔍</button>
+                </div>
+            </form>
+
+            <div class="nav-links">
+                <a th:href="@{/home}">Trang chủ</a>
+                <a sec:authorize="hasRole('STUDENT')" th:href="@{/student/my-courses}">Học phần của tôi</a>
+                <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/courses}">Quản lý học phần</a>
+                
+                <div sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/login}" style="margin-right: 8px;">Đăng nhập</a>
+                    <a th:href="@{/register}" class="btn-auth">Đăng ký</a>
+                </div>
+                
+                <div sec:authorize="isAuthenticated()" style="display: flex; align-items: center; gap: 12px; margin-left: 8px;">
+                    <div style="text-align: right; line-height: 1.2;">
+                        <div style="font-weight: 600; font-size: 0.95rem; color: var(--primary);">👤 <span sec:authentication="name"></span></div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;" sec:authentication="principal.authorities"></div>
+                    </div>
+                    <form th:action="@{/logout}" method="post" style="margin:0">
+                        <button type="submit" class="btn btn-auth" style="background: var(--text); padding: 6px 12px; font-size: 0.85rem;">🔓 Đăng xuất</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div layout:fragment="content">
+            <!-- Nội dung trang con -->
+        </div>
+    </main>
+
+    <footer>
+        © 2026 <strong>StudyHub</strong> | Hệ thống đăng ký học phần trực tuyến
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('liveSearchInput');
+            const searchDropdown = document.getElementById('searchDropdown');
+            let debounceTimer;
+
+            searchInput.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                const query = this.value.trim();
+                
+                if (query.length === 0) {
+                    searchDropdown.style.display = 'none';
+                    return;
+                }
+
+                debounceTimer = setTimeout(() => {
+                    fetch(`/api/courses/search?keyword=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            searchDropdown.innerHTML = '';
+                            if (data.length > 0) {
+                                data.forEach(course => {
+                                    const img = course.image ? course.image : '/images/default-course.png';
+                                    const a = document.createElement('a');
+                                    a.href = `/home?keyword=${encodeURIComponent(course.name)}`;
+                                    a.className = 'search-result-item';
+                                    a.innerHTML = `
+                                        <img src="${img}" class="search-result-img" alt="img">
+                                        <div class="search-result-info">
+                                            <span class="search-result-title">${course.name}</span>
+                                            <span class="search-result-meta">${course.lecturer} • ${course.credits} tín chỉ</span>
+                                        </div>
+                                    `;
+                                    searchDropdown.appendChild(a);
+                                });
+                                searchDropdown.style.display = 'block';
+                            } else {
+                                searchDropdown.innerHTML = '<div style="padding: 12px; text-align: center; color: var(--text-muted); font-size: 0.9rem;">Không tìm thấy kết quả.</div>';
+                                searchDropdown.style.display = 'block';
+                            }
+                        })
+                        .catch(err => console.error('Error fetching search results:', err));
+                }, 300); // Debounce 300ms
+            });
+
+            // Hide dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+                    searchDropdown.style.display = 'none';
+                }
+            });
+            
+            // Show dropdown when clicking back into input if it has content
+            searchInput.addEventListener('focus', function() {
+                if (this.value.trim().length > 0 && searchDropdown.innerHTML.trim() !== '') {
+                    searchDropdown.style.display = 'block';
+                }
+            });
+        });
+
+        // Global SweetAlert Functions
+        function confirmEnroll(courseId) {
+            Swal.fire({
+                title: 'Xác nhận đăng ký?',
+                text: "Bạn có chắc chắn muốn đăng ký học phần này không?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#4f46e5',
+                cancelButtonColor: '#94a3b8',
+                confirmButtonText: 'Đồng ý',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('enrollForm-' + courseId).submit();
+                }
+            })
+        }
+
+        function confirmUnenroll(courseId) {
+            Swal.fire({
+                title: 'Hủy đăng ký?',
+                text: "Bạn có chắc chắn muốn hủy đăng ký học phần này? Hành động này không thể hoàn tác.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#94a3b8',
+                confirmButtonText: 'Có, hủy!',
+                cancelButtonText: 'Đóng'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('unenrollForm-' + courseId).submit();
+                }
+            })
+        }
+    </script>
+</body>
+</html>
