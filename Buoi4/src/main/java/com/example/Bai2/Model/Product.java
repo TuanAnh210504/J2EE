@@ -1,5 +1,9 @@
 package com.example.Bai2.Model;
 
+<<<<<<< HEAD
+=======
+import jakarta.persistence.*;
+>>>>>>> a8470cd (Initial commit)
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +16,15 @@ import org.hibernate.validator.constraints.Length;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+<<<<<<< HEAD
 public class Product {
+=======
+@Entity
+@Table(name = "san_pham")
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+>>>>>>> a8470cd (Initial commit)
     private int id;
     @NotBlank(message = "Tên sản phẩm mục không được để trống")
     private String name;
@@ -23,6 +35,12 @@ public class Product {
     @Max(value = 9999999, message = "Giá không được vượt quá 9.999.999")
     private Double price;
 
+<<<<<<< HEAD
     @NotNull(message = "Danh mục không được để trống")
     private Integer categoryId;
+=======
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+>>>>>>> a8470cd (Initial commit)
 }

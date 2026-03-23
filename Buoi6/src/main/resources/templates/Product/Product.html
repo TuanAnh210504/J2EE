@@ -10,10 +10,50 @@
 
     <h2>📦 Danh sách sản phẩm</h2>
 
+<<<<<<< HEAD
     <div style="margin-bottom: 20px;" sec:authorize="hasRole('ADMIN')">
         <a class="btn btn-primary" th:href="@{/products/create}">➕ Thêm sản phẩm mới</a>
     </div>
 
+=======
+    <!-- ===== Câu 1: Tìm kiếm | Câu 3: Sắp xếp | Câu 4: Lọc category ===== -->
+    <form th:action="@{/products}" method="get" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; align-items:center;">
+        <!-- Câu 1: Tìm kiếm -->
+        <input type="text" name="keyword" th:value="${keyword}"
+               placeholder="🔍 Tìm kiếm sản phẩm..."
+               style="padding:9px 13px; border:1.5px solid #e5e7eb; border-radius:7px; font-size:.92rem; min-width:220px;" />
+
+        <!-- Câu 4: Lọc category -->
+        <select name="categoryId" style="padding:9px 13px; border:1.5px solid #e5e7eb; border-radius:7px; font-size:.92rem;">
+            <option value="0">-- Tất cả danh mục --</option>
+            <option th:each="cat : ${categories}"
+                    th:value="${cat.id}"
+                    th:text="${cat.name}"
+                    th:selected="${cat.id == categoryId}">
+            </option>
+        </select>
+
+        <!-- Câu 3: Sắp xếp -->
+        <select name="sort" style="padding:9px 13px; border:1.5px solid #e5e7eb; border-radius:7px; font-size:.92rem;">
+            <option value="" th:selected="${sort == ''}">-- Sắp xếp --</option>
+            <option value="asc" th:selected="${sort == 'asc'}">💰 Giá tăng dần</option>
+            <option value="desc" th:selected="${sort == 'desc'}">💸 Giá giảm dần</option>
+        </select>
+
+        <input type="hidden" name="page" value="0" />
+        <input type="hidden" name="size" value="5" />
+
+        <button type="submit" class="btn btn-primary">🔎 Tìm kiếm</button>
+        <a th:href="@{/products}" class="btn btn-secondary">↺ Đặt lại</a>
+    </form>
+
+    <!-- Thêm sản phẩm (ADMIN) -->
+    <div style="margin-bottom: 16px;" sec:authorize="hasRole('ADMIN')">
+        <a class="btn btn-primary" th:href="@{/products/create}">➕ Thêm sản phẩm mới</a>
+    </div>
+
+    <!-- ===== Bảng sản phẩm ===== -->
+>>>>>>> a8470cd (Initial commit)
     <table>
         <thead>
             <tr>
@@ -21,7 +61,11 @@
                 <th>Ảnh</th>
                 <th>Giá</th>
                 <th>Danh mục</th>
+<<<<<<< HEAD
                 <th sec:authorize="hasRole('ADMIN')">Chức năng</th>
+=======
+                <th>Thao tác</th>
+>>>>>>> a8470cd (Initial commit)
             </tr>
         </thead>
         <tbody>
@@ -42,23 +86,68 @@
                     <span class="cat-badge" th:if="${p.category != null}" th:text="${p.category.name}"></span>
                     <span style="color: #9ca3af; font-size:.85rem;" th:if="${p.category == null}">—</span>
                 </td>
+<<<<<<< HEAD
                 <td sec:authorize="hasRole('ADMIN')">
                     <div class="action-links">
                         <a class="btn btn-secondary" th:href="@{/products/edit/{id}(id=${p.id})}">✏️ Sửa</a>
                         <a class="btn btn-danger" th:href="@{/products/delete/{id}(id=${p.id})}"
                             onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">🗑 Xóa</a>
+=======
+                <td>
+                    <div class="action-links">
+                        <!-- Câu 5: Nút thêm vào giỏ hàng -->
+                        <form th:action="@{/cart/add}" method="post" style="display:inline-flex; align-items:center; gap:6px;">
+                            <input type="hidden" name="productId" th:value="${p.id}" />
+                            <input type="number" name="quantity" value="1" min="1"
+                                   style="width:55px; padding:6px 8px; border:1.5px solid #e5e7eb; border-radius:6px; font-size:.85rem;" />
+                            <button type="submit" class="btn btn-success">🛒 Giỏ</button>
+                        </form>
+                        <a class="btn btn-secondary" sec:authorize="hasRole('ADMIN')"
+                           th:href="@{/products/edit/{id}(id=${p.id})}">✏️ Sửa</a>
+                        <a class="btn btn-danger" sec:authorize="hasRole('ADMIN')"
+                           th:href="@{/products/delete/{id}(id=${p.id})}"
+                           onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">🗑 Xóa</a>
+>>>>>>> a8470cd (Initial commit)
                     </div>
                 </td>
             </tr>
 
             <tr th:if="${#lists.isEmpty(products)}">
                 <td colspan="5" style="text-align:center; padding: 40px; color: #9ca3af;">
+<<<<<<< HEAD
                     Chưa có sản phẩm nào. Hãy thêm sản phẩm đầu tiên!
+=======
+                    Không tìm thấy sản phẩm nào.
+>>>>>>> a8470cd (Initial commit)
                 </td>
             </tr>
         </tbody>
     </table>
 
+<<<<<<< HEAD
+=======
+    <!-- ===== Câu 2: Phân trang ===== -->
+    <div style="display:flex; justify-content:center; align-items:center; gap:12px; margin-top:24px;"
+         th:if="${totalPages > 1}">
+        <!-- Previous -->
+        <a th:if="${currentPage > 0}"
+           th:href="@{/products(keyword=${keyword}, categoryId=${categoryId}, sort=${sort}, page=${currentPage - 1}, size=5)}"
+           class="btn btn-secondary">← Previous</a>
+        <span th:if="${currentPage == 0}" class="btn btn-secondary" style="opacity:.4; cursor:not-allowed;">← Previous</span>
+
+        <!-- Page indicator -->
+        <span style="font-size:.92rem; color:#6b7280;">
+            Trang <strong th:text="${currentPage + 1}"></strong> / <strong th:text="${totalPages}"></strong>
+        </span>
+
+        <!-- Next -->
+        <a th:if="${currentPage + 1 < totalPages}"
+           th:href="@{/products(keyword=${keyword}, categoryId=${categoryId}, sort=${sort}, page=${currentPage + 1}, size=5)}"
+           class="btn btn-secondary">Next →</a>
+        <span th:if="${currentPage + 1 >= totalPages}" class="btn btn-secondary" style="opacity:.4; cursor:not-allowed;">Next →</span>
+    </div>
+
+>>>>>>> a8470cd (Initial commit)
 </section>
 
 </html>

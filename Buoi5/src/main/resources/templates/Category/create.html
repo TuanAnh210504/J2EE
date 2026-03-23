@@ -11,6 +11,7 @@
 
         <h2 th:text="${category.id == 0 ? '➕ Thêm danh mục' : '✏️ Cập nhật danh mục'}"></h2>
 
+<<<<<<< HEAD
         <form th:action="${category.id == 0} 
                      ? @{/categories/create} 
                      : @{/categories/edit/{id}(id=${category.id})}" th:object="${category}" method="post">
@@ -28,6 +29,25 @@
 
             <button type="submit">💾 Lưu</button>
             <a th:href="@{/products}">⬅ Quay lại</a>
+=======
+        <form th:action="${category.id == 0}
+                     ? @{/categories/create}
+                     : @{/categories/edit/{id}(id=${category.id})}" th:object="${category}" method="post"
+            style="max-width: 480px;">
+
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="form-group">
+                <label>Tên danh mục</label>
+                <input type="text" th:field="*{name}" placeholder="Nhập tên danh mục...">
+                <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">💾 Lưu danh mục</button>
+                <a class="btn btn-secondary" th:href="@{/products}">⬅ Quay lại</a>
+            </div>
+>>>>>>> a8470cd (Initial commit)
 
         </form>
     </section>

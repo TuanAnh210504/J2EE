@@ -15,8 +15,12 @@
 
     <table border="1" cellpadding="8" cellspacing="0" width="100%">
         <tr>
+<<<<<<< HEAD
             <th>ID</th>
             <th>Tên</th>
+=======
+             <th>Tên</th>
+>>>>>>> a8470cd (Initial commit)
             <th>Ảnh</th>
             <th>Giá</th>
             <th>Danh mục</th>
@@ -24,14 +28,22 @@
         </tr>
 
         <tr th:each="p : ${products}">
+<<<<<<< HEAD
             <td th:text="${p.id}"></td>
             <td th:text="${p.name}"></td>
+=======
+             <td th:text="${p.name}"></td>
+>>>>>>> a8470cd (Initial commit)
             <td>
                 <img th:if="${p.image != null}" th:src="${p.image}" alt="Product Image"
                     style="width: 100px; height: auto;" />
             </td>
             <td th:text="${p.price}"></td>
+<<<<<<< HEAD
             <td th:text="${p.categoryId}"></td>
+=======
+            <td th:text="${p.category != null ? p.category.name : ''}"></td>
+>>>>>>> a8470cd (Initial commit)
             <td>
                 <a th:href="@{/products/edit/{id}(id=${p.id})}">✏️ Sửa</a> |
                 <a th:href="@{/products/delete/{id}(id=${p.id})}" onclick="return confirm('Xóa sản phẩm này?')">

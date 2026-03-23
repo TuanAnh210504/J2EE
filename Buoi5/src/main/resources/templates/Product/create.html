@@ -4,6 +4,7 @@
 
 <head>
     <title th:text="${product.id == 0 ? 'Thêm sản phẩm' : 'Cập nhật sản phẩm'}"></title>
+<<<<<<< HEAD
 
     <style>
         .img-preview {
@@ -17,6 +18,8 @@
             padding: 4px;
         }
     </style>
+=======
+>>>>>>> a8470cd (Initial commit)
 </head>
 
 <body>
@@ -25,11 +28,16 @@
         <h2 th:text="${product.id == 0 ? '➕ Thêm sản phẩm' : '✏️ Cập nhật sản phẩm'}"></h2>
 
         <form th:action="${product.id == 0} ? @{/products/create} : @{/products/edit/{id}(id=${product.id})}"
+<<<<<<< HEAD
             th:object="${product}" method="post" enctype="multipart/form-data">
+=======
+            th:object="${product}" method="post" enctype="multipart/form-data" style="max-width: 540px;">
+>>>>>>> a8470cd (Initial commit)
 
             <input type="hidden" th:field="*{id}" />
 
             <!-- Tên -->
+<<<<<<< HEAD
             <div>
                 <label>Tên sản phẩm</label><br>
                 <input type="text" th:field="*{name}">
@@ -68,6 +76,38 @@
                 <label>Danh mục</label><br>
                 <select name="category.id">
                     <option value="">-- Chọn danh mục --</option>
+=======
+            <div class="form-group">
+                <label>Tên sản phẩm</label>
+                <input type="text" th:field="*{name}" placeholder="Nhập tên sản phẩm...">
+                <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+
+            <!-- Ảnh -->
+            <div class="form-group">
+                <label>Ảnh sản phẩm</label>
+                <input type="file" name="imageFile" id="imageInput" accept="image/*" onchange="previewImage(event)"
+                    style="padding: 6px 0; font-size:.88rem;">
+                <div class="error" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></div>
+                <div class="img-preview">
+                    <img id="imagePreview" th:src="${product.image != null} ? ${product.image} : ''"
+                        th:style="|display: ${product.image != null ? 'block' : 'none'}|">
+                </div>
+            </div>
+
+            <!-- Giá -->
+            <div class="form-group">
+                <label>Giá (VNĐ)</label>
+                <input type="number" th:field="*{price}" min="1" placeholder="Nhập giá sản phẩm...">
+                <div class="error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+            </div>
+
+            <!-- Danh mục -->
+            <div class="form-group">
+                <label>Danh mục</label>
+                <select name="category.id">
+                    <option value="">— Chọn danh mục —</option>
+>>>>>>> a8470cd (Initial commit)
                     <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"
                         th:selected="${product.category != null and product.category.id == c.id}">
                     </option>
@@ -75,10 +115,17 @@
                 <div class="error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
             </div>
 
+<<<<<<< HEAD
             <br>
 
             <button type="submit">💾 Lưu</button>
             <a th:href="@{/products}">⬅ Quay lại</a>
+=======
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">💾 Lưu sản phẩm</button>
+                <a class="btn btn-secondary" th:href="@{/products}">⬅ Quay lại</a>
+            </div>
+>>>>>>> a8470cd (Initial commit)
 
         </form>
 
@@ -86,7 +133,10 @@
             function previewImage(event) {
                 const preview = document.getElementById("imagePreview");
                 const file = event.target.files[0];
+<<<<<<< HEAD
 
+=======
+>>>>>>> a8470cd (Initial commit)
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function (e) {
@@ -95,7 +145,10 @@
                     }
                     reader.readAsDataURL(file);
                 } else {
+<<<<<<< HEAD
                     // Mute if file selection canceled and no image existing
+=======
+>>>>>>> a8470cd (Initial commit)
                     if (!preview.src.includes('/images/')) {
                         preview.style.display = "none";
                         preview.src = "";

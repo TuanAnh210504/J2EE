@@ -20,7 +20,11 @@ public class SecurityConfig {
                         .requestMatchers("/products/create", "/products/edit/**", "/products/delete/**",
                                 "/categories/**")
                         .hasRole("ADMIN")
+<<<<<<< HEAD
                         .requestMatchers("/products", "/home").hasAnyRole("USER", "ADMIN")
+=======
+                        .requestMatchers("/products", "/home", "/cart/**", "/order/**").hasAnyRole("USER", "ADMIN")
+>>>>>>> a8470cd (Initial commit)
 
                         // Các request còn lại phải quét xác thực
                         .requestMatchers("/register").permitAll()

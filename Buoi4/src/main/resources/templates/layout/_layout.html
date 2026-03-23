@@ -1,7 +1,11 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html lang="vi"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+=======
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+>>>>>>> a8470cd (Initial commit)
 
 <head>
     <meta charset="UTF-8">
@@ -26,7 +30,11 @@
 
         /* ===== Header ===== */
         header {
+<<<<<<< HEAD
             background: #2c3e50;
+=======
+            background: #e084ef;
+>>>>>>> a8470cd (Initial commit)
             padding: 15px 30px;
         }
 
@@ -67,7 +75,11 @@
 
         /* ===== Footer ===== */
         footer {
+<<<<<<< HEAD
             background: #2c3e50;
+=======
+            background: #e084ef;
+>>>>>>> a8470cd (Initial commit)
             color: #bdc3c7;
             text-align: center;
             padding: 12px;
@@ -85,6 +97,7 @@
 
 <body>
 
+<<<<<<< HEAD
 <header>
     <nav>
         <a th:href="@{/products}">🏠 Trang chủ</a>
@@ -104,3 +117,26 @@
 
 </body>
 </html>
+=======
+    <header>
+        <nav>
+            <a th:href="@{/products}">🏠 Trang chủ</a>
+            <a th:href="@{/products/create}">➕ Thêm sản phẩm</a>
+            <a th:href="@{/categories/create}">📁 Thêm danh mục</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="content-box" layout:fragment="content">
+            <!-- Nội dung trang con -->
+        </div>
+    </main>
+
+    <footer>
+        © 2026 - Product Manager
+    </footer>
+
+</body>
+
+</html>
+>>>>>>> a8470cd (Initial commit)
