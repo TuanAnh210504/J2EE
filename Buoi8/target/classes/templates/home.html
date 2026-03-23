@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{layout/_layout}">
+
+<head>
+    <title>Trang chủ</title>
+</head>
+
+<section layout:fragment="content">
+
+    <div style="text-align: center; padding: 40px 20px;">
+        <div style="font-size: 4rem; margin-bottom: 16px;">👋</div>
+        <h2 style="justify-content: center; font-size: 1.8rem; margin-bottom: 10px;">
+            Xin chào, <span th:text="${username}" style="color: #4f46e5;">Người dùng</span>!
+        </h2>
+        <p style="color: #6b7280; font-size: 1rem; margin-bottom: 32px;">
+            Chào mừng bạn đã đăng nhập vào hệ thống Quản Lý Sản Phẩm.
+        </p>
+
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <a class="btn btn-primary" th:href="@{/products}" style="font-size: 1rem; padding: 12px 28px;">
+                📦 Danh sách sản phẩm
+            </a>
+            <a sec:authorize="hasRole('ADMIN')" class="btn btn-secondary" th:href="@{/products/create}"
+                style="font-size: 1rem; padding: 12px 28px;">
+                ➕ Thêm sản phẩm
+            </a>
+        </div>
+    </div>
+
+</section>
+
+</html>
